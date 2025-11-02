@@ -28,7 +28,7 @@ def generate_launch_description():
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(lidar_launch_path),
         launch_arguments={
-            'topic_name': LaunchConfiguration('scan_topic'),
+            'topic_name': LaunchConfiguration('scan_raw'),
             'frame_id': LaunchConfiguration('lidar_frame')
         }.items()
     )
