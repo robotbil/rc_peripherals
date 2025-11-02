@@ -18,11 +18,9 @@ def generate_launch_description():
     scan_topic_arg = DeclareLaunchArgument('scan_topic',default_value='sensors/lidar/scan',description='Topic name for lidar scan data')
 
     # Paths
-    peripherals_package_path = get_package_share_directory('rc_peripherals')
     oradar_package_path = get_package_share_directory('oradar_lidar')
 
     lidar_launch_path = os.path.join(oradar_package_path, 'launch/ms200_scan.launch.py')
-    laser_filters_config = os.path.join(peripherals_package_path, 'config/lidar_filters_config_ms200.yaml')
     
     # Include Lidar launch file
     lidar_launch = IncludeLaunchDescription(
@@ -33,23 +31,12 @@ def generate_launch_description():
         }.items()
     )
 
-
-
-    laser_filter_node = Node(
-        package='laser_filters',
-        executable='scan_to_scan_filter_chain',
-        output='screen',
-        parameters=[laser_filters_config],
-        remappings=[('scan', scan_raw),
-                    ('scan_filtered', scan_topic)]
-    )
     return LaunchDescription([
         scan_topic_arg,
         scan_raw_arg,
         lidar_frame_arg,
 
         lidar_launch,
-        laser_filter_node
     ])
 
 
