@@ -16,39 +16,19 @@ def generate_launch_description():
         executable='apply_calib_node',
         name='imu_calib',
         output='screen',
-        parameters=[{"calib_file": calib_file_path}],
+        parameters=[{
+            "calib_file": calib_file_path,
+        }],
         remappings=[
             ('raw', '/sensors/imu/raw'),
             ('corrected', '/sensors/imu/corrected')
         ]
     )
 
-    imu_filter_node = Node(
-        package='imu_complementary_filter',
-        executable='complementary_filter_node',
-        name='imu_filter',
-        output='screen',
-        parameters=[
-            {
-                'use_mag': False,
-                'do_bias_estimation': True,
-                'do_adaptive_gain': True,
-                'publish_debug_topics': True
-            }
-        ],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/imu/data_raw', '/sensors/imu/corrected'),
-            ('imu/data', '/sensors/imu/filtered')
-        ]
-    )
-
     return LaunchDescription([
         TimerAction(
             period=5.0,
-            actions=[imu_calib_node, 
-                    imu_filter_node,
-                    ]
+            actions=[imu_calib_node]
         )
     ])
 
